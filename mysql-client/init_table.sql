@@ -1,3 +1,5 @@
+CREATE DATABASE es_db;
+USE es_db;
 DROP TABLE IF EXISTS es_table;
 CREATE TABLE es_table (
   id CHAR(36) NOT NULL,
