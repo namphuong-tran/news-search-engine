@@ -11,7 +11,7 @@ CREATE TABLE es_table (
   publish_date DATETIME, 
   keywords TEXT,
   summary TEXT, 
-  text TEXT,
+  text LONGTEXT,
   url VARCHAR(200) NOT NULL,
   modification_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
