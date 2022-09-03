@@ -2,6 +2,9 @@ import pandas as pd
 from datetime import datetime
 import mysql.connector as mysql
 from newspaper import Newspaper
+#!/home/namphuong/Code/news-search-engine/myvenv/bin/python
+
+import sys
 
 
 class Database:
@@ -28,15 +31,16 @@ class Database:
                   news.summary, news.text, news.url)
         cursor.execute(query, values)
         connection.commit()
-        print(cursor.rowcount, "record inserted")
+        
 
 
 if __name__ == '__main__':
     db = Database('localhost', 'system', 'admin123', 'temp_db')
     connection = db.get_connection()
     cursor = connection.cursor()
+    # file_name = '/home/namphuong/Downloads/cnn_2021_test.csv'
+    file_name = sys.argv[1]
 
-    file_name = '/home/namphuong/Downloads/cnn_2021_test.csv'
     df = pd.read_csv(file_name)
     df = df.reset_index()
     for index, row in df.iterrows():
@@ -45,3 +49,5 @@ if __name__ == '__main__':
                          row['authors'], publish_date, row['keywords'],
                          row['summary'], row['text'], row['url'])
         db.insert_data(connection, cursor, news)
+        print(index, "record inserted")
+
