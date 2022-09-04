@@ -1,0 +1,71 @@
+GET /temp_index/_search
+
+GET /_search
+{
+  "query": {
+    "multi_match" : {
+      "query":    "2021 Australian grand pix", 
+      "type":       "best_fields",
+      "fields": [ "title^3", "summary^2", "text", "keywords^2" ], 
+      "tie_breaker": 0.3
+    }
+  }
+}
+
+GET /_search
+{
+  "query": {
+          "bool": {
+              "must": {
+                
+                    "multi_match": {
+                        "query": "2021 Australian grand pix",
+                        "type": "best_fields",
+                        "fields": ["title^3", "summary^2", "text", "keywords^2"],
+                        "tie_breaker": 0.3
+                    }
+              },
+              "filter": {
+                      "range": {
+                          "publish_date": {
+                              "gte": "2021-02-05T00:00:00.000Z",
+                              "lte": "2021-02-10T00:00:00.000Z"
+                          }
+                      }
+                 
+              }
+          }
+      }
+}
+
+GET /_search
+{
+  "query": {
+          "bool": {
+              "must": {
+                    "multi_match": {
+                        "query": "2021 Australian grand pix",
+                        "type": "best_fields",
+                        "fields": ["title^3", "summary^2", "text", "keywords^2"],
+                        "tie_breaker": 0.3
+                    }
+                },
+              "filter": [
+                {
+                    "range": {
+                        "publish_date": {
+                            "gte": "2021-02-05T00:00:00.000Z",
+                            "lte": "2021-02-10T00:00:00.000Z"
+                        }
+                    }
+                },
+                {
+                    "terms": {
+                        "newspaper.keyword": ["BBC", "CNN"]
+                     }
+                }
+              ]
+              
+          }
+      }
+}
