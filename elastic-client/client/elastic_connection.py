@@ -45,7 +45,9 @@ query = {
                         "lte": "2021-02-10T00:00:00.000Z"
                     }
                 },
-                "term" : { "newspaper" : "production" }
+                "term" :{
+                        "newspaper.keyword": ["BBC", "CNN"]
+                     }
             }
         }
     }
