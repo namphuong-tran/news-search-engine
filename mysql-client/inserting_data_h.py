@@ -69,14 +69,14 @@ if __name__ == '__main__':
     cfg_dic = cfg.get_config()
     mysql = MySql(cfg_dic, 'mysql')
     # user_sql = mysql.create_insert_sql('es_table', 'REPLACE', len(fields), fields)
-    user_sql = mysql.create_insert_sql('es_table', 'REPLACE', 9)
+    user_sql = mysql.create_insert_sql('es_table', 'REPLACE', 10)
 
     df = df.reset_index()
     for index, row in df.iterrows():
         publish_date = datetime.strptime(row['publish_date'], '%Y-%m-%d')
+        modification_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        dt = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         news = [row['id'], row['title'], row['newspaper'], row['authors'],
-                publish_date, row['keywords'], row['summary'], row['text'], row['url']]
+                publish_date, row['keywords'], row['summary'], row['text'], row['url'], modification_time]
         mysql.execute(user_sql, news)
         print(index, "record inserted")
