@@ -1,12 +1,12 @@
-import requests
-from bs4 import BeautifulSoup
 #!/home/namphuong/Code/news-search-engine/myvenv/bin/python
 import sys
+import requests
+from bs4 import BeautifulSoup
 
 
 class CNNCrawler:
 
-    def __init__(self,selected_date):
+    def __init__(self, selected_date):
         self.selected_date = selected_date
 
     def get_link_articles(self):
@@ -14,7 +14,8 @@ class CNNCrawler:
         selected_year = self.selected_date.split('-')[0]
         selected_month = self.selected_date.split('-')[1]
         selected_day = self.selected_date.split('-')[2]
-        targeted_url = self.generate_targeted_url(selected_year, selected_month)
+        targeted_url = self.generate_targeted_url(
+            selected_year, selected_month)
         html = requests.get(targeted_url)
         html.encoding = 'utf-8'
         sp = BeautifulSoup(html.text, 'lxml')
@@ -23,7 +24,7 @@ class CNNCrawler:
         for article_element in article_list.find_all('li'):
             article = article_element.find_all('span')
             publish_date = article[0].get_text().split('-')[2]
-            
+
             if (publish_date == selected_day):
                 link = article[1].find('a').get('href')
                 url_list.append(link)
