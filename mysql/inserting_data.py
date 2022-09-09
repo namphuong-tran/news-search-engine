@@ -65,12 +65,14 @@ class MySql:
 
 
 if __name__ == '__main__':
+    # Read csv file
     file_name = sys.argv[1]
     df = pd.read_csv(file_name)
+    # Read mysql config file
     cfg = ReadConfig()
     cfg_dic = cfg.get_config()
+    # Create insert query
     mysql = MySql(cfg_dic, 'mysql')
-    # user_sql = mysql.create_insert_sql('es_table', 'REPLACE', len(fields), fields)
     user_sql = mysql.create_insert_sql('es_table', 'REPLACE', 10)
 
     df = df.reset_index()
