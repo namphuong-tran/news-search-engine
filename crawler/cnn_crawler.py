@@ -38,6 +38,6 @@ class CNNCrawler:
 
 if __name__ == '__main__':
     selected_date = sys.argv[1]
-    crawler = CNNCrawler(selected_date)
-    url_list = crawler.get_link_articles()
+    cnn_crawler = CNNCrawler(selected_date)
+    url_list = cnn_crawler.get_link_articles()
     print(len(url_list))
