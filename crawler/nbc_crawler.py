@@ -3,7 +3,8 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 import datetime
-
+import crawler  
+import channel_name
 
 class NBCCrawler:
 
@@ -63,6 +64,7 @@ class NBCCrawler:
 
 if __name__ == '__main__':
     selected_date = sys.argv[1]
-    crawler = NBCCrawler(selected_date)
-    url_list = crawler.get_link_articles()
+    nbc_crawler = NBCCrawler(selected_date)
+    url_list = nbc_crawler.get_link_articles()
     print(len(url_list))
+    crawler.crawl_articles(url_list, channel_name.NBC)
