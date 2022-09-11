@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 import crawler  
+import channel_name
 
 class CNBCCrawler:
 
@@ -37,4 +38,4 @@ if __name__ == '__main__':
     cnbc_crawler = CNBCCrawler(selected_date)
     url_list = cnbc_crawler.get_link_articles()
     print(len(url_list))
-    crawler.crawl_articles(url_list, 'CNBC')
+    crawler.crawl_articles(url_list, channel_name.CBNC)
