@@ -37,5 +37,5 @@ def crawl_articles(url_list, chanel_name):
                     publish_date, keywords, summary, text, url, modification_time]
             mysql.execute(user_sql, news)
         except Exception:
+            logging.error(url)
             logging.exception("Crawler exception was thrown!")
-            logging.info(url)
