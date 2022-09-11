@@ -4,9 +4,12 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, date
 from time import strptime
+import channel_name
+import crawler
 
 
 class ReutersCrawler:
+    ROOT_URL = 'https://www.reuters.com'
 
     def __init__(self, selected_date):
         self.selected_date = selected_date
@@ -49,7 +52,8 @@ class ReutersCrawler:
 
             # Compare publish date with selected date in order to collect articles
             if (selected_date_obj == publish_date):
-                artile_url_list.append(article_element.find('a').get('href'))
+                artile_url_list.append(
+                    self.ROOT_URL + article_element.find('a').get('href'))
             if (publish_date < selected_date_obj):
                 self.is_next_page = False
 
@@ -62,6 +66,7 @@ class ReutersCrawler:
 
 if __name__ == '__main__':
     selected_date = sys.argv[1]
-    crawler = ReutersCrawler(selected_date)
-    url_list = crawler.get_link_articles()
+    reuters_crawler = ReutersCrawler(selected_date)
+    url_list = reuters_crawler.get_link_articles()
     print(len(url_list))
+    crawler.crawl_articles(url_list, channel_name.REUTERS)
