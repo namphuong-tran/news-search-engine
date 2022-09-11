@@ -2,6 +2,8 @@
 import sys
 import requests
 from bs4 import BeautifulSoup
+import channel_name
+import crawler
 
 
 class CNNCrawler:
@@ -41,3 +43,4 @@ if __name__ == '__main__':
     cnn_crawler = CNNCrawler(selected_date)
     url_list = cnn_crawler.get_link_articles()
     print(len(url_list))
+    crawler.crawl_articles(url_list, channel_name.CNN)
