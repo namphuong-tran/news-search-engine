@@ -29,6 +29,9 @@ class ReadConfig:
 
 
 class MySql:
+    GREATER = '>'
+    EQUAL = '='
+    SMALLER = '<'
     def __init__(self, cfg_dic, cfg_name):
         self.cfg_dic = cfg_dic
         config = cfg_dic[cfg_name]
@@ -63,6 +66,13 @@ class MySql:
         print(sql)
         return sql
 
+    @staticmethod
+    def create_query_sql(table, fields, condition_field, condition, condition_value, order_by=None):
+        """select a,b from table where a>1 and b<10 order by a desc"""
+        sql = """SELECT {} FROM {} WHERE {}""".format(','.join(fields), table, condition_field + condition + condition_value)
+        if order_by:
+            sql = sql + f' ORDER BY {order_by}'
+        return sql
 
 if __name__ == '__main__':
     # Read csv file
@@ -84,3 +94,10 @@ if __name__ == '__main__':
                 publish_date, row['keywords'], row['summary'], row['text'], row['url'], modification_time]
         mysql.execute(user_sql, news)
         print(index, "record inserted")
+
+    # cfg = ReadConfig()
+    # cfg_dic = cfg.get_config()
+    # mysql = MySql(cfg_dic, 'mysql')
+    # a = datetime.today().replace(day=1).strftime("%Y-%m-%d")
+    # user_sql = mysql.create_query_sql('es_table', ['url'], 'publish_date', MySql.GREATER, "'{}'".format(a))
+    # print(user_sql)
