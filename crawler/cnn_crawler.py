@@ -43,4 +43,4 @@ if __name__ == '__main__':
     cnn_crawler = CNNCrawler(selected_date)
     url_list = cnn_crawler.get_link_articles()
     print(len(url_list))
-    crawler.crawl_articles(url_list, channel_name.CNN)
+    crawler.crawl_articles(url_list, channel_name.CNN, selected_date)

@@ -38,4 +38,4 @@ if __name__ == '__main__':
     cnbc_crawler = CNBCCrawler(selected_date)
     url_list = cnbc_crawler.get_link_articles()
     print(len(url_list))
-    crawler.crawl_articles(url_list, channel_name.CBNC)
+    crawler.crawl_articles(url_list, channel_name.CBNC, selected_date)

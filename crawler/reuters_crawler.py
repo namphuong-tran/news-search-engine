@@ -69,4 +69,4 @@ if __name__ == '__main__':
     reuters_crawler = ReutersCrawler(selected_date)
     url_list = reuters_crawler.get_link_articles()
     print(len(url_list))
-    crawler.crawl_articles(url_list, channel_name.REUTERS)
+    crawler.crawl_articles(url_list, channel_name.REUTERS, selected_date)

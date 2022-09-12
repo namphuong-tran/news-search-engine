@@ -66,4 +66,4 @@ if __name__ == '__main__':
     url_list = usa_today_crawler.get_link_articles()
     print(len(url_list))
 
-    crawler.crawl_articles(url_list, channel_name.USATODAY)
+    crawler.crawl_articles(url_list, channel_name.USATODAY, selected_date)

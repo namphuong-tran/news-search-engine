@@ -1,3 +1,4 @@
+import channel_name
 import logging
 from datetime import datetime
 from select import select
@@ -12,7 +13,7 @@ import nltk
 nltk.download('punkt')
 
 
-def crawl_articles(url_list, channel, selected_date=None):
+def crawl_articles(url_list, channel, selected_date):
     cfg = ReadConfig()
     cfg_dic = cfg.get_config()
     # Read mysql config file
@@ -21,9 +22,9 @@ def crawl_articles(url_list, channel, selected_date=None):
     # Create insert query
     mysql = MySql(cfg_dic, 'mysql')
     user_sql = mysql.create_insert_sql('es_table', 'REPLACE', 10)
-    if (selected_date != None):
-        exist_articles = get_exist_articles_by_channel(mysql, channel, selected_date)
-        url_list = list(set(url_list) - set(exist_articles))
+    exist_articles = get_exist_articles_by_channel(
+        mysql, channel, selected_date)
+    url_list = list(set(url_list) - set(exist_articles))
     print(len(url_list))
     for url in url_list:
         try:
@@ -47,10 +48,18 @@ def crawl_articles(url_list, channel, selected_date=None):
 
 
 def get_exist_articles_by_channel(mysql, channel, selected_date):
-    selected_date = datetime.strptime(
-        selected_date, '%Y-%m-%d').replace(day=1).strftime("%Y-%m-%d")
-    conditions = [mysql.MySqlCondition('newspaper', MySql.MySqlCondition.EQUAL),
-                  mysql.MySqlCondition('publish_date', MySql.MySqlCondition.GREATER)]
+
+    if (channel == channel_name.NBC):
+        # get all articles in this month
+        selected_date = datetime.strptime(
+            selected_date, '%Y-%m-%d').replace(day=1).strftime("%Y-%m-%d")
+        conditions = [mysql.MySqlCondition('newspaper', MySql.MySqlCondition.EQUAL),
+                      mysql.MySqlCondition('publish_date', MySql.MySqlCondition.GREATER)]
+    else:
+        # get only articles published in selected date
+        conditions = [mysql.MySqlCondition('newspaper', MySql.MySqlCondition.EQUAL),
+                      mysql.MySqlCondition('publish_date', MySql.MySqlCondition.EQUAL)]
+
     sql_query = mysql.create_query_sql(
         'es_table', ['url'], conditions)
     params = (channel, selected_date)
