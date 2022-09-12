@@ -1,4 +1,5 @@
 #!/home/namphuong/Code/news-search-engine/myvenv/bin/python
+import logging
 import sys
 import requests
 from bs4 import BeautifulSoup
@@ -35,7 +36,14 @@ class CNBCCrawler:
 
 if __name__ == '__main__':
     selected_date = sys.argv[1]
-    cnbc_crawler = CNBCCrawler(selected_date)
-    url_list = cnbc_crawler.get_link_articles()
-    print(len(url_list))
-    crawler.crawl_articles(url_list, channel_name.CBNC, selected_date)
+    selected_date_obj = datetime.strptime(selected_date, '%Y-%m-%d')
+    if(selected_date_obj <= datetime.today()):
+        cnbc_crawler = CNBCCrawler(selected_date)
+        url_list = cnbc_crawler.get_link_articles()
+        print(len(url_list))
+        crawler.crawl_articles(url_list, channel_name.CBNC, selected_date)
+    else: 
+        logging.error("Selected date is invalid")
+
+
+

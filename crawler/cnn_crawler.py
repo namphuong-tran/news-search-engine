@@ -4,6 +4,8 @@ import requests
 from bs4 import BeautifulSoup
 import channel_name
 import crawler
+import logging
+from datetime import datetime
 
 
 class CNNCrawler:
@@ -40,7 +42,11 @@ class CNNCrawler:
 
 if __name__ == '__main__':
     selected_date = sys.argv[1]
-    cnn_crawler = CNNCrawler(selected_date)
-    url_list = cnn_crawler.get_link_articles()
-    print(len(url_list))
-    crawler.crawl_articles(url_list, channel_name.CNN, selected_date)
+    selected_date_obj = datetime.strptime(selected_date, '%Y-%m-%d')
+    if (selected_date_obj <= datetime.today()):
+        cnn_crawler = CNNCrawler(selected_date)
+        url_list = cnn_crawler.get_link_articles()
+        print(len(url_list))
+        crawler.crawl_articles(url_list, channel_name.CNN, selected_date)
+    else:
+        logging.error("Selected date is invalid")

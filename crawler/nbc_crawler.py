@@ -1,10 +1,12 @@
 #!/home/namphuong/Code/news-search-engine/myvenv/bin/python
+import logging
 import sys
 import requests
 from bs4 import BeautifulSoup
-import datetime
-import crawler  
+from datetime import datetime
+import crawler
 import channel_name
+
 
 class NBCCrawler:
 
@@ -18,7 +20,7 @@ class NBCCrawler:
         html = requests.get(targeted_url)
         html.encoding = 'utf-8'
         sp = BeautifulSoup(html.text, 'lxml')
-        
+
         # get article url in page 1
         aritcle_url_list.extend(self.get_link_article_pagination(None, sp))
 
@@ -53,8 +55,7 @@ class NBCCrawler:
         year = selected_date.split('-')[0]
         month_num = selected_date.split('-')[1]
         # Mapping month number to full month name in lowercase(Eg: 09 -> september)
-        month_name = datetime.datetime(
-            1, int(month_num), 1).strftime("%B").lower()
+        month_name = datetime(1, int(month_num), 1).strftime("%B").lower()
         # Convert number in string to short style (Eg: 01 to 1)
         day = int(selected_date.split('-')[2])
         if (page == None):
@@ -64,7 +65,11 @@ class NBCCrawler:
 
 if __name__ == '__main__':
     selected_date = sys.argv[1]
-    nbc_crawler = NBCCrawler(selected_date)
-    url_list = nbc_crawler.get_link_articles()
-    print(len(url_list))
-    crawler.crawl_articles(url_list, channel_name.NBC, selected_date)
+    selected_date_obj = datetime.strptime(selected_date, '%Y-%m-%d')
+    if (selected_date_obj <= datetime.today()):
+        nbc_crawler = NBCCrawler(selected_date)
+        url_list = nbc_crawler.get_link_articles()
+        print(len(url_list))
+        crawler.crawl_articles(url_list, channel_name.NBC, selected_date)
+    else:
+        logging.error("Selected date is invalid")
