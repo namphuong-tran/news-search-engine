@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, date
 from time import strptime
 import channel_name
-import crawler
+import crawlers
 
 
 class ReutersCrawler:
@@ -72,6 +72,6 @@ if __name__ == '__main__':
         reuters_crawler = ReutersCrawler(selected_date)
         url_list = reuters_crawler.get_link_articles()
         print(len(url_list))
-        crawler.crawl_articles(url_list, channel_name.REUTERS, selected_date)
+        crawlers.crawl_articles(url_list, channel_name.REUTERS, selected_date)
     else:
         logging.error("Selected date is invalid")

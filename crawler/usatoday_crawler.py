@@ -4,7 +4,7 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-import crawler
+import crawlers
 import channel_name
 
 
@@ -68,6 +68,6 @@ if __name__ == '__main__':
         usa_today_crawler = USATodayCrawler(selected_date)
         url_list = usa_today_crawler.get_link_articles()
         print(len(url_list))
-        crawler.crawl_articles(url_list, channel_name.USATODAY, selected_date)
+        crawlers.crawl_articles(url_list, channel_name.USATODAY, selected_date)
     else:
         logging.error("Selected date is invalid")
