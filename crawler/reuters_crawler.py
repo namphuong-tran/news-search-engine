@@ -1,11 +1,12 @@
 #!/home/namphuong/Code/news-search-engine/myvenv/bin/python
+import imp
 import logging
 import sys
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, date
 from time import strptime
-import channel_name
+from crawler.newschannels import NewsChannels
 import crawlers
 
 
@@ -72,6 +73,7 @@ if __name__ == '__main__':
         reuters_crawler = ReutersCrawler(selected_date)
         url_list = reuters_crawler.get_link_articles()
         print(len(url_list))
-        crawlers.crawl_articles(url_list, channel_name.REUTERS, selected_date)
+        crawlers.crawl_articles(
+            url_list, NewsChannels.REUTERS.value, selected_date)
     else:
         logging.error("Selected date is invalid")
