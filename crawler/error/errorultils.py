@@ -1,4 +1,6 @@
-from crawler import channel_name
+from crawler.newschannels import NewsChannels
+
+
 def read_error_url(channel):
     f = open(get_file_name(channel), 'r')
     url_list = f.read().splitlines()
@@ -15,14 +17,13 @@ def write_error_url(url_list, channel):
 
 
 def get_file_name(channel):
-    if (channel == channel_name.CBNC):
+    if (channel == NewsChannels.CBNC.value):
         return 'error/cnbc.txt'
-    if(channel == channel_name.CNN):
+    if (channel == NewsChannels.CNN.value):
         return 'error/cnn.txt'
-    if(channel == channel_name.NBC):
+    if (channel == NewsChannels.NBC.value):
         return 'error/nbc.txt'
-    if(channel == channel_name.REUTERS):
+    if (channel == NewsChannels.REUTERS.value):
         return 'error/reuters.txt'
-    if(channel == channel_name.USATODAY):
+    if (channel == NewsChannels.USATODAY.value):
         return 'error/usatoday.txt'
-

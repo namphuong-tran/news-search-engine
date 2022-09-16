@@ -1,6 +1,6 @@
 #!/home/namphuong/Code/news-search-engine/myvenv/bin/python
 from error import errorultils
-import channel_name
+from crawler.newschannels import NewsChannels
 import logging
 from datetime import datetime
 from select import select
@@ -61,7 +61,7 @@ def crawl_articles(url_list, channel, selected_date = None):
 
 def get_exist_articles_by_channel(mysql, channel, selected_date):
 
-    if (channel == channel_name.NBC):
+    if (channel == NewsChannels.NBC.value):
         # get all articles in this month
         selected_date = datetime.strptime(
             selected_date, '%Y-%m-%d').replace(day=1).strftime("%Y-%m-%d")

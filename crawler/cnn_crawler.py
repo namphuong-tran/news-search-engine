@@ -2,7 +2,7 @@
 import sys
 import requests
 from bs4 import BeautifulSoup
-import channel_name
+from crawler.newschannels import NewsChannels
 import crawlers
 import logging
 from datetime import datetime
@@ -47,6 +47,7 @@ if __name__ == '__main__':
         cnn_crawler = CNNCrawler(selected_date)
         url_list = cnn_crawler.get_link_articles()
         print(len(url_list))
-        crawlers.crawl_articles(url_list, channel_name.CNN, selected_date)
+        crawlers.crawl_articles(
+            url_list, NewsChannels.CNN.value, selected_date)
     else:
         logging.error("Selected date is invalid")
