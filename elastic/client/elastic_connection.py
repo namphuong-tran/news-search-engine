@@ -14,6 +14,9 @@ es = Elasticsearch(hosts="http://elastic:changeme@127.0.0.1:9200/")
 print(es.info())
 
 matching_terms = "2021 Australian grand pix"
+start_date = "2022-09-05"
+end_date = "2022-09-15"
+news_channel = ["BBC", "CNN"]
 # query = {
 #     "query": {
 #         "multi_match": {
@@ -25,12 +28,12 @@ matching_terms = "2021 Australian grand pix"
 #     }
 # }
 
-
 query = {
+    "from": 0,
+    "size": 1,
     "query": {
         "bool": {
             "must": {
-
                 "multi_match": {
                     "query": matching_terms,
                     "type": "best_fields",
@@ -38,22 +41,28 @@ query = {
                     "tie_breaker": 0.3
                 }
             },
-            "filter": {
-                "range": {
-                    "publish_date": {
-                        "gte": "2021-02-05T00:00:00.000Z",
-                        "lte": "2021-02-10T00:00:00.000Z"
+            "filter": [
+                {
+                    "range": {
+                        "publish_date": {
+                            "gte": start_date,
+                            "lte": end_date
+                        }
                     }
                 },
-                "term" :{
-                        "newspaper.keyword": ["BBC", "CNN"]
-                     }
-            }
+                {
+                    "terms": {
+                        "newspaper.keyword": news_channel
+                    }
+                }
+            ]
+
         }
     }
 }
 
 query = json.dumps(query)
+print(query)
 
 resp = es.search(index="temp_index", body=query,)
 print("Got %d Hits:" % resp['hits']['total']['value'])
