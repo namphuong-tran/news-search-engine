@@ -4,9 +4,10 @@ from config_retrieval import ReadConfig
 
 
 class PythonClient:
-    def __init__(self, cfg_dic, cfg_name):
-        self.cfg_dic = cfg_dic
-        config = cfg_dic[cfg_name]
+    def __init__(self):
+        cfg = ReadConfig()
+        self.cfg_dic = cfg.get_config()
+        config = self.cfg_dic['elastic']
         self.host = config['host']
         self.user = config['user']
         self.password = config['password']
@@ -64,9 +65,7 @@ if __name__ == '__main__':
     matching_terms = "2021 Australian grand pix"
     date_range = {"start_date" : "2022-09-05", "end_date" : "2022-09-15"}
     news_channel = ["BBC", "CNN"]
-    cfg = ReadConfig()
-    cfg_dic = cfg.get_config()
-    client = PythonClient(cfg_dic, 'elastic')
+    client = PythonClient()
     resp = client.search_articles(
         pagination, matching_terms, date_range, news_channel)
     print("Got %d Hits:" % resp['hits']['total']['value'])
