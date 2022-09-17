@@ -1,6 +1,6 @@
 from elasticsearch import Elasticsearch
 import json
-from config_retrieval import ReadConfig
+from elastic.client.config_retrieval import ReadConfig
 
 
 class PythonClient:
