@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+    <p>Hello, World!123</p>
+    {% if startdate %}
+        <h1> {{startdate}}</h1>
+        <h1> {{enddate}}</h1>
+        {% for i in language %}
+            <h1> {{i}}</h1>
+        {% endfor %}
+        
+    {% else %}
+        <div class="shadow p-3 mb-5 bg-body rounded">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                {{ form.terms.label(class="form-label") }}
+
+                {{ form.terms(class="form-control") }}
+                <br />
+
+                {{ form.startdate.label(class="form-label") }} 
+                
+                {{form.startdate(class='datepicker form-control')}} 
+                <br />
+
+                {{ form.enddate.label(class="form-label") }} 
+                
+                {{form.enddate(class='datepicker form-control')}} 
+                <br />
+
+                {{ form.language.label(class="form-label") }} 
+                <!-- {{form.language(class='form-select form-control')}}  -->
+                {{form.language(class_='multiselect form-control')}}
+                
+                <br />
+
+                {{ form.submit(class="btn btn-secondary") }}
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}
