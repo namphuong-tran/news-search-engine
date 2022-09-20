@@ -1,44 +1,52 @@
 from crypt import methods
 from flask import Flask, request, render_template
+from crawler.newschannels import NewsChannels
 from elastic.client.elastic_connection import PythonClient
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, SelectMultipleField, SubmitField
 from wtforms.validators import DataRequired
+from wtforms.widgets import ListWidget, CheckboxInput
+from datetime import date
 
 app = Flask(
     __name__, template_folder='../templates')
 app.config['SECRET_KEY'] = "secret"
 
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = ListWidget(prefix_label=False)
+    option_widget = CheckboxInput()
+
+
 class SearchForm(FlaskForm):
     terms = StringField("Type something", validators=[DataRequired()])
-    startdate = DateField('Start Date', format='%Y-%m-%d', validators=[DataRequired()])
-    enddate = DateField('End Date', format='%Y-%m-%d', validators=[DataRequired()])
-    language = SelectMultipleField('Programming Language', 
-                               choices=[
-                                 ('cpp', 'C++'), 
-                                 ('py', 'Python'), 
-                                 ('text', 'Plain Text')
-                               ])
+    startdate = DateField('Start Date', format='%Y-%m-%d', default=date.today,
+                          validators=[DataRequired()])
+    enddate = DateField('End Date', format='%Y-%m-%d', default=date.today,
+                        validators=[DataRequired()])
+    # create a list of value/description tuples
+    channels = [(name, member.value)
+                for name, member in NewsChannels.__members__.items()]
+    selected_channels = MultiCheckboxField('News channels', choices=channels)
     submit = SubmitField("Submit")
+
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
     terms = None
     startdate = None
     enddate = None
-    language = None
+    selected_channels = None
     form = SearchForm()
     if form.validate_on_submit():
         terms = form.terms.data
         startdate = form.startdate.data
         enddate = form.enddate.data
-        language = form.language.data
-        form.terms.data = None
-        form.startdate.data = None
-        form.enddate.data = None
-        form.language.data = None
+        selected_channels = form.selected_channels.data
+        print(type(selected_channels))
+        print(selected_channels)
 
-    return render_template("index.html", terms = terms, startdate = startdate, enddate = enddate, language = language, form = form)
+    return render_template("index.html", terms=terms, startdate=startdate, enddate=enddate, selected_channels=selected_channels, form=form)
 
 
 @app.route("/search", methods=['GET', 'POST'])
@@ -76,11 +84,15 @@ def search():
 # Custom Error Pages
 
 # Invalid URL
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
 
 # Internal Server Error
+
+
 @app.errorhandler(500)
 def server_error(e):
     return render_template("500.html"), 500
