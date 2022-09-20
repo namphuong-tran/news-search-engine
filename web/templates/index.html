@@ -24,6 +24,18 @@
             {{ form.submit(class="btn btn-secondary") }}
         </form>
     </div>
+    {% if pagination %}
+        {{ pagination.info|safe }}
+
+        {{ pagination.links }}
+
+        {% for a in articles %}
+            <h1> {{a}}</h1>
+        {% endfor %}
+        {{ pagination.links }}
+    {% endif %}
+    
+
     {% if startdate %}
         <h1> {{startdate}}</h1>
         <h1> {{enddate}}</h1>
