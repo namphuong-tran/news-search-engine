@@ -1,12 +1,13 @@
 from crypt import methods
 from flask import Flask, request, render_template
 from crawler.newschannels import NewsChannels
-from elastic.client.elastic_connection import PythonClient
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, SelectMultipleField, SubmitField
 from wtforms.validators import DataRequired
 from wtforms.widgets import ListWidget, CheckboxInput
 from datetime import date
+import web.api.db as db 
+from flask_paginate import Pagination, get_page_parameter
 
 app = Flask(
     __name__, template_folder='../templates')
@@ -37,6 +38,8 @@ def index():
     startdate = None
     enddate = None
     selected_channels = None
+    articles = None
+    pagination = None
     form = SearchForm()
     if form.validate_on_submit():
         terms = form.terms.data
@@ -45,8 +48,25 @@ def index():
         selected_channels = form.selected_channels.data
         print(type(selected_channels))
         print(selected_channels)
+        # resp = db.search()
+        # total = resp.get('total')
+        # articles = resp.get('result')
 
-    return render_template("index.html", terms=terms, startdate=startdate, enddate=enddate, selected_channels=selected_channels, form=form)
+        search = False
+        q = request.args.get('q')
+        if q:
+            search = True
+        
+        # search = True
+        total = 100
+        articles = [1,2,3,4,5,6,7,8,9,10]
+
+        page = request.args.get(get_page_parameter(), type=int, default=1)
+        pagination = Pagination(page=page, total=total, search=search, record_name='articles', css_framework='bootstrap5', show_single_page=True, per_page=3)
+
+    print(request.args.get(get_page_parameter(), type=int, default=1))
+    return render_template("index.html", terms=terms, startdate=startdate, enddate=enddate, selected_channels=selected_channels, form=form, articles=articles,
+                           pagination=pagination)
 
 
 @app.route("/search", methods=['GET', 'POST'])
