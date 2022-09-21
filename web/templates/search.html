@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if pagination %}
+        {{ pagination.info|safe }}
+
+        {% for a in articles %}
+            <h1> {{a.get("title")}}</h1>
+        {% endfor %}
+        {{ pagination.links }}
+    {% endif %}
+ 
+{% endblock %}
