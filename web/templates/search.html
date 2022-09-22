@@ -3,8 +3,24 @@
     {% if pagination %}
         {{ pagination.info|safe }}
 
-        {% for a in articles %}
-            <h1> {{a.get("title")}}</h1>
+        {% for article in articles %}
+            <!-- <h1> {{article.get("title")}}</h1> -->
+            <div class="shadow p-3 mb-5 bg-body rounded">
+                <h2><a href="{{ article.get('url') }}">{{ article.get('title') }}</a></h2>
+                <small>By: {{ article.get('newspaper') }}<br/>
+                {{ article.get('publish_date') }}</small> <br/><br/>
+                <b>Keywords</b><br/>
+                {% for tag in article.get('keywords').split(',') %}
+                    <button type="button" class="btn btn-light">{{tag}}</button>
+                {% endfor %}
+                <br/><br/>
+                <b>Summary</b>
+                {{ article.get('summary')|safe }}
+                <br/><br/>
+                <a href="{{ article.get('url') }}" class="btn btn-outline-secondary btn-sm">View Post</a>
+                <br/><br/>
+            </div>
+            <br/>
         {% endfor %}
         {{ pagination.links }}
     {% endif %}

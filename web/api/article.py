@@ -88,7 +88,7 @@ def search():
     date_range = {
         "start_date": session['startdate'], "end_date": session['enddate']}
     selected_channels = session['selected_channels']
-    size = 2
+    size = 10
     page = request.args.get(get_page_parameter(), type=int, default=1)
     print(page)
 
