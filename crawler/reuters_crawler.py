@@ -8,7 +8,7 @@ from datetime import datetime, date
 from time import strptime
 from crawler.newschannels import NewsChannels
 import crawlers
-
+from error import errorultils
 
 class ReutersCrawler:
     ROOT_URL = 'https://www.reuters.com'
@@ -18,46 +18,66 @@ class ReutersCrawler:
         self.is_next_page = True
         self.num_page = 0
 
-    def get_link_articles(self):
-        aritcle_url_list = []
+    # def get_link_articles(self):
+    #     aritcle_url_list = []
 
-        while (self.is_next_page):
-            aritcle_url_list.extend(self.get_link_article_pagination())
+    #     while (self.is_next_page):
+    #         aritcle_url_list.extend(self.get_link_article_pagination())
+
+    #     return aritcle_url_list
+
+    # def get_link_article_pagination(self):
+    #     artile_url_list = []
+    #     self.num_page = self.num_page + 1
+    #     targeted_url = self.generate_targeted_url(self.num_page)
+    #     html = requests.get(targeted_url)
+    #     html.encoding = 'utf-8'
+    #     sp = BeautifulSoup(html.text, 'lxml')
+    #     main_content = sp.find('div', {'class': 'news-headline-list'})
+    #     current_date = date.today()
+    #     selected_date_obj = datetime.strptime(selected_date, '%Y-%m-%d').date()
+    #     for article_element in main_content.find_all('article', {'class': 'story'}):
+    #         # Convert publish date to format '%Y-%m-%d' (Eg. 2022-09-01)
+    #         publish_date = article_element.find(
+    #             'span', {'class': 'timestamp'}).get_text()
+    #         if ('EDT' in publish_date.split()):
+    #             publish_date = current_date
+    #         else:
+    #             year = publish_date.split()[2]
+    #             day = publish_date.split()[1]
+    #             month = strptime(publish_date.split()[0], '%b').tm_mon
+    #             # convert a single digit number into a double digits string (Eg 9 => 09)
+    #             month = f'{month:02d}'
+    #             publish_date = year + '-' + month + '-' + day
+    #             publish_date = datetime.strptime(
+    #                 publish_date, '%Y-%m-%d').date()
+
+    #         # Compare publish date with selected date in order to collect articles
+    #         if (selected_date_obj == publish_date):
+    #             artile_url_list.append(
+    #                 self.ROOT_URL + article_element.find('a').get('href'))
+    #         if (publish_date < selected_date_obj):
+    #             self.is_next_page = False
+
+    #     return artile_url_list
+    
+    def get_link_articles(self, start, stop):
+        aritcle_url_list = []
+        for i in range (start, stop):
+            aritcle_url_list.extend(self.get_link_article_pagination(i))
 
         return aritcle_url_list
 
-    def get_link_article_pagination(self):
+    def get_link_article_pagination(self, num_page):
         artile_url_list = []
-        self.num_page = self.num_page + 1
-        targeted_url = self.generate_targeted_url(self.num_page)
+        targeted_url = self.generate_targeted_url(num_page)
         html = requests.get(targeted_url)
         html.encoding = 'utf-8'
         sp = BeautifulSoup(html.text, 'lxml')
         main_content = sp.find('div', {'class': 'news-headline-list'})
-        current_date = date.today()
-        selected_date_obj = datetime.strptime(selected_date, '%Y-%m-%d').date()
         for article_element in main_content.find_all('article', {'class': 'story'}):
-            # Convert publish date to format '%Y-%m-%d' (Eg. 2022-09-01)
-            publish_date = article_element.find(
-                'span', {'class': 'timestamp'}).get_text()
-            if ('EDT' in publish_date.split()):
-                publish_date = current_date
-            else:
-                year = publish_date.split()[2]
-                day = publish_date.split()[1]
-                month = strptime(publish_date.split()[0], '%b').tm_mon
-                # convert a single digit number into a double digits string (Eg 9 => 09)
-                month = f'{month:02d}'
-                publish_date = year + '-' + month + '-' + day
-                publish_date = datetime.strptime(
-                    publish_date, '%Y-%m-%d').date()
-
-            # Compare publish date with selected date in order to collect articles
-            if (selected_date_obj == publish_date):
-                artile_url_list.append(
-                    self.ROOT_URL + article_element.find('a').get('href'))
-            if (publish_date < selected_date_obj):
-                self.is_next_page = False
+            artile_url_list.append(self.ROOT_URL + article_element.find('a').get('href'))
+            
 
         return artile_url_list
 
@@ -67,13 +87,19 @@ class ReutersCrawler:
 
 
 if __name__ == '__main__':
+    # selected_date = sys.argv[1]
+    # selected_date_obj = datetime.strptime(selected_date, '%Y-%m-%d')
+    # if (selected_date_obj <= datetime.today()):
+    #     reuters_crawler = ReutersCrawler(selected_date)
+    #     url_list = reuters_crawler.get_link_articles()
+    #     print(len(url_list))
+    #     crawlers.crawl_articles(
+    #         url_list, NewsChannels.REUTERS.value, selected_date)
+    # else:
+    #     logging.error("Selected date is invalid")
+
     selected_date = sys.argv[1]
-    selected_date_obj = datetime.strptime(selected_date, '%Y-%m-%d')
-    if (selected_date_obj <= datetime.today()):
-        reuters_crawler = ReutersCrawler(selected_date)
-        url_list = reuters_crawler.get_link_articles()
-        print(len(url_list))
-        crawlers.crawl_articles(
-            url_list, NewsChannels.REUTERS.value, selected_date)
-    else:
-        logging.error("Selected date is invalid")
+    reuters_crawler = ReutersCrawler(selected_date)
+    url_list = reuters_crawler.get_link_articles(0,100)
+    print(len(url_list))
+    errorultils.write_error_url(url_list, 'REUTERS')
