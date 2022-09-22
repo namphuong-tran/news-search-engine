@@ -1,14 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
     {% if pagination %}
+        <h4> Search for: {{terms}}</h4>
         {{ pagination.info|safe }}
 
         {% for article in articles %}
             <!-- <h1> {{article.get("title")}}</h1> -->
             <div class="shadow p-3 mb-5 bg-body rounded">
-                <h2><a href="{{ article.get('url') }}">{{ article.get('title') }}</a></h2>
-                <small>By: {{ article.get('newspaper') }}<br/>
-                {{ article.get('publish_date') }}</small> <br/><br/>
+                
+                <h5><a href="{{ article.get('url') }}">{{ article.get('title') }}</a></h5>
+                <!-- <small>By: {{ article.get('newspaper') }}<br/>
+                {{ article.get('publish_date') }}</small> <br/><br/> -->
+                <a class="btn btn-outline-success btn-sm">{{ article.get('newspaper') }}</a>
+                <small>{{ article.get('publish_date') }}</small> <br/><br/>
                 <b>Keywords</b><br/>
                 {% for tag in article.get('keywords').split(',') %}
                     <button type="button" class="btn btn-light">{{tag}}</button>

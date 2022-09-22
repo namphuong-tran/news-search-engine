@@ -100,7 +100,7 @@ def search():
     page = request.args.get(get_page_parameter(), type=int, default=1)
     pagination = Pagination(page=page, total=total, record_name='articles',
                             css_framework='bootstrap5', show_single_page=True, per_page=size)
-    return render_template("search.html", articles=articles, pagination=pagination)
+    return render_template("search.html", terms = terms, articles=articles, pagination=pagination)
 
 # Custom Error Pages
 
