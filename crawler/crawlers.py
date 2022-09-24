@@ -82,4 +82,4 @@ def get_exist_articles_by_channel(mysql, channel, selected_date):
 
 if __name__ == '__main__':
     channel = sys.argv[1]
-    crawl_articles(url_list=errorultils.read_error_url(), channel=channel, selected_date=None)
+    crawl_articles(url_list=errorultils.read_error_url(channel), channel=channel, selected_date=None)
