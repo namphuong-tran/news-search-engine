@@ -43,7 +43,7 @@ def crawl_articles(url_list, channel, selected_date = None):
             article.nlp()
             title = article.title
             authors = ', '.join(article.authors)
-            publish_date = article.publish_date
+            publish_date = article.publish_date.strftime('%Y-%m-%d')
             keywords = ', '.join(article.keywords)
             summary = article.summary
             text = article.text
