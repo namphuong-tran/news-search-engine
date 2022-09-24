@@ -8,10 +8,16 @@ elasticsearch==7.13.0
 feedfinder2==0.0.4
 feedparser==6.0.10
 filelock==3.8.0
+Flask==2.2.2
+flask-paginate==2022.1.8
+Flask-WTF==1.0.1
 idna==3.3
+itsdangerous==2.1.2
 jieba3k==0.35.1
+Jinja2==3.1.2
 joblib==1.1.0
 lxml==4.9.1
+MarkupSafe==2.1.1
 newspaper3k==0.2.8
 nltk==3.7
 numpy==1.23.3
@@ -33,3 +39,5 @@ tldextract==3.3.1
 toml==0.10.2
 tqdm==4.64.1
 urllib3==1.26.12
+Werkzeug==2.2.2
+WTForms==3.0.1
