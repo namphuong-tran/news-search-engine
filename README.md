@@ -1,5 +1,5 @@
 # Breaking news search engine
-
+![alt text](https://raw.githubusercontent.com/phuongtrannam/news-search-engine/main/SW2022.jpg)
 This is the final project in the Software education for Vietnamese students in Korea. We built a search engine for news. Data is collected from five well-known news channels: CNBC, CNN, NBC, Reuters and USAToday. 
 
 ## Installation
