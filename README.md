@@ -2,6 +2,9 @@
 ![alt text](https://raw.githubusercontent.com/phuongtrannam/news-search-engine/main/SW2022.jpg)
 This is the final project in the Software education for Vietnamese students in Korea. We built a search engine for news. Data is collected from five well-known news channels: CNBC, CNN, NBC, Reuters and USAToday. 
 
+## Overview
+![alt text](https://raw.githubusercontent.com/phuongtrannam/news-search-engine/main/overview.png)
+
 ## Installation
 ### Python 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install requirement packages.
